@@ -1,0 +1,342 @@
+/* --- Global Styles & Variables --- */
+:root {
+    --primary-bg: #0d0d21; /* Dark blue/purple */
+    --secondary-bg: #1a1a3a; /* Slightly lighter */
+    --card-bg: #232347; /* Background for cards */
+    --text-color: #e0e0e0;
+    --neon-cyan: #00ffff;
+    --neon-magenta: #ff00ff;
+    --neon-green: #39ff14;
+    --neon-red: #ff1f1f;
+    --border-color: var(--neon-cyan);
+    --glow-color-cyan: rgba(0, 255, 255, 0.7);
+    --glow-color-green: rgba(57, 255, 20, 0.7);
+
+    --font-primary: 'Orbitron', sans-serif;
+    --font-secondary: 'Rajdhani', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    font-family: var(--font-secondary);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 95%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+/* --- Header --- */
+#app-header {
+    background-color: var(--secondary-bg);
+    padding: 15px 0;
+    border-bottom: 2px solid var(--neon-cyan);
+    box-shadow: 0 0 15px var(--glow-color-cyan);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#app-title {
+    font-family: var(--font-primary);
+    font-size: 2.5em;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), 0 0 20px #fff;
+    margin: 0;
+}
+
+/* --- Main Content Area --- */
+#main-content-area {
+    flex-grow: 1;
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.column-feed-status { flex: 1.2; }
+.column-mirror { flex: 2; } /* Make mirror column wider */
+.column-controls-logs { flex: 1; }
+
+/* --- Content Cards --- */
+.content-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), inset 0 0 5px rgba(0, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.content-card h2 {
+    font-family: var(--font-primary);
+    color: var(--neon-green);
+    text-shadow: 0 0 5px var(--neon-green);
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.5em;
+    border-bottom: 1px dashed var(--neon-green);
+    padding-bottom: 10px;
+}
+
+/* --- Live Feed & Gesture Mirror --- */
+#video-container, #threejs-container {
+    width: 100%;
+    aspect-ratio: 4 / 3; /* Maintain aspect ratio */
+    background-color: #000;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For fallback UI positioning */
+}
+
+#webcam-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the container, might crop */
+    transform: scaleX(-1); /* Mirror effect */
+}
+
+#threejs-container canvas {
+    display: block;
+    width: 100% !important; /* Override Three.js inline styles if necessary */
+    height: 100% !important;
+}
+
+.fallback-ui {
+    color: var(--neon-red);
+    text-align: center;
+    padding: 20px;
+}
+.fallback-ui p { margin: 5px 0; }
+
+/* --- Gesture Status, Counts, History --- */
+#current-gesture-label {
+    font-size: 1.3em;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(57, 255, 20, 0.1);
+    border: 1px solid var(--neon-green);
+    border-radius: 5px;
+}
+.glowing-text {
+    color: var(--neon-green);
+    text-shadow: 0 0 3px var(--neon-green), 0 0 6px var(--neon-green);
+}
+#current-gesture-label span { display: inline-block; min-width: 120px; }
+
+
+#gesture-counts-display p {
+    margin: 5px 0;
+    font-size: 0.95em;
+}
+#gesture-counts-display span {
+    font-weight: bold;
+    color: var(--neon-cyan);
+}
+
+#gesture-history-log {
+    max-height: 200px; /* Adjust as needed */
+    overflow-y: auto;
+    font-size: 0.9em;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--primary-bg);
+}
+#gesture-history-log div {
+    padding: 3px 0;
+    border-bottom: 1px dotted #444;
+}
+#gesture-history-log div:last-child {
+    border-bottom: none;
+}
+#gesture-history-log .timestamp {
+    color: #888;
+    font-size: 0.8em;
+    margin-right: 8px;
+}
+
+/* --- Action Buttons --- */
+#action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.action-btn {
+    background-color: var(--secondary-bg);
+    color: var(--neon-cyan);
+    border: 1px solid var(--neon-cyan);
+    padding: 10px 15px;
+    font-family: var(--font-secondary);
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    text-shadow: 0 0 3px var(--neon-cyan);
+}
+
+.action-btn:hover {
+    background-color: var(--neon-cyan);
+    color: var(--primary-bg);
+    box-shadow: 0 0 10px var(--glow-color-cyan), 0 0 15px var(--glow-color-cyan);
+}
+.action-btn:active {
+    transform: translateY(1px);
+}
+
+
+/* --- Loading Overlay & Modals --- */
+#loading-overlay, .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(13, 13, 33, 0.95); /* var(--primary-bg) with opacity */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: var(--neon-cyan);
+    font-family: var(--font-primary);
+}
+.modal-overlay { display: none; /* Hidden by default */ }
+
+
+#loading-message {
+    font-size: 1.5em;
+    margin-top: 20px;
+    text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(0, 255, 255, 0.3);
+    border-top-color: var(--neon-cyan);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--neon-magenta);
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+.modal-content h2 {
+    color: var(--neon-magenta);
+    text-shadow: 0 0 5px var(--neon-magenta);
+    font-family: var(--font-primary);
+}
+.modal-content p { margin-bottom: 15px; }
+.modal-content ul { list-style: none; padding-left: 0; text-align: left; max-width: 300px; margin: 15px auto; }
+.modal-content ul li { margin-bottom: 5px; padding-left: 1em; position: relative; }
+.modal-content ul li::before { content: "»"; color: var(--neon-magenta); position: absolute; left: 0; }
+
+
+.modal-content button { /* For buttons inside modals */
+    background-color: var(--neon-magenta);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-family: var(--font-primary);
+    font-size: 1.1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.modal-content button:hover {
+    background-color: #d900d9;
+    box-shadow: 0 0 10px var(--neon-magenta);
+}
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 2em;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+.modal-close-btn:hover { color: var(--neon-magenta); }
+
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.9em;
+    color: #777;
+    border-top: 1px solid #333;
+    margin-top: auto; /* Pushes footer to bottom if content is short */
+}
+
+/* --- Scrollbar (Optional Styling) --- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--secondary-bg); }
+::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #00e0e0; }
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1200px) {
+    #main-content-area {
+        flex-direction: column;
+    }
+    .column { width: 100%; } /* Stack columns */
+    .column-mirror { order: -1; } /* Optionally move mirror to top on mobile */
+}
+
+@media (max-width: 768px) {
+    #app-title { font-size: 2em; }
+    .content-card h2 { font-size: 1.3em; }
+    #action-buttons { grid-template-columns: 1fr; } /* Stack action buttons */
+
+    #gesture-history-log { max-height: 150px; }
+    #current-gesture-label { font-size: 1.1em; }
+    .modal-content { padding: 20px; }
+}
+
+@media (max-width: 480px) {
+    #app-title { font-size: 1.8em; }
+    .content-card h2 { font-size: 1.1em; }
+    .action-btn { font-size: 0.9em; padding: 8px 12px; }
+    #current-gesture-label { font-size: 1em; }
+    #current-gesture-label span { min-width: 100px; }
+}

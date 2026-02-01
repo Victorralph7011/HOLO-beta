@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOLO-Gen1 Hand Tracking (Local Libs)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div id="loading-message">Initializing HOLO-Gen1 Hand Tracking...</div>
+    </div>
+
+    <div id="permission-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Camera Access Required</h2>
+            <p>HOLO-Gen1 needs access to your webcam to track your hand in real time.</p>
+            <p>Please click "Allow" on the browser's permission prompt after clicking the button below.</p>
+            <button id="grant-camera-button">Grant Camera Access</button>
+        </div>
+    </div>
+
+    <div id="help-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="close-help-modal-btn">&times;</button>
+            <h2>Help & Information</h2>
+            <p>This application tracks your hand movements in real-time using your webcam and renders a 3D model of your hand.</p>
+            <p>Position your hand clearly in the live feed. The 3D mirror will reflect your hand's pose.</p>
+            <p><strong>Actions:</strong></p>
+            <ul>
+                <li><strong>Capture Image:</strong> Saves a snapshot of the Live Feed and the 3D Gesture Mirror.</li>
+                <li><strong>Clear 3D View:</strong> Resets the 3D hand display.</li>
+            </ul>
+        </div>
+    </div>
+
+    <header id="app-header">
+        <div class="container header-content">
+            <h1 id="app-title">HOLO-Gen1 <span style="font-size: 0.5em;">(Hand Tracking - Local Libs)</span></h1>
+        </div>
+    </header>
+
+    <main id="main-content-area" class="container">
+        <div class="column column-feed-status">
+            <section id="live-feed-section" class="content-card">
+                <h2>Live Feed</h2>
+                <div id="video-container">
+                    <video id="webcam-video" autoplay playsinline muted></video>
+                    <div id="no-camera-fallback" class="fallback-ui" style="display: none;">
+                        <p>⚠️ Camera access denied or no camera found.</p>
+                        <p>Please grant permission or connect a camera and refresh.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="gesture-status-section" class="content-card">
+                <h2>Hand Presence</h2>
+                <div id="current-gesture-label" class="glowing-text">
+                    <span id="hand-presence-label">Hands: Not Detected</span>
+                </div>
+            </section>
+        </div>
+
+        <div class="column column-mirror">
+            <section id="gesture-mirror-section" class="content-card">
+                <h2>Gesture Mirror (3D)</h2>
+                <div id="threejs-container">
+                    </div>
+            </section>
+        </div>
+
+        <div class="column column-controls-logs">
+            <section id="actions-section" class="content-card">
+                <h2>Actions</h2>
+                <div id="action-buttons">
+                    <button id="capture-image-btn" class="action-btn">Capture Image</button>
+                    <button id="clear-all-btn" class="action-btn">Clear 3D View</button>
+                    <button id="help-btn" class="action-btn">Help / Info</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>HOLO-Gen1 &copy; 2025. Client-Side Hand Tracking Demo.</p>
+    </footer>
+
+    <script src="js/libs/tf-core.min.js"></script>
+    <script src="js/libs/tf-converter.min.js"></script>
+    <script src="js/libs/tf-backend-webgl.min.js"></script>
+    <script src="js/libs/handpose.min.js"></script>
+
+    <script src="js/libs/three.min.js"></script>
+    <script>
+        // Inline script to check if libraries are defined immediately after their script tags
+        if (typeof tf === 'undefined') {
+             console.error("HOLO-Gen1 INLINE ERROR: TensorFlow.js (tf) IS NOT defined. Check local js/libs/tf-core.min.js loading!");
+        } else if (typeof handpose === 'undefined') {
+             console.error("HOLO-Gen1 INLINE ERROR: Handpose IS NOT defined. Check local js/libs/handpose.min.js loading!");
+        } else if (typeof THREE === 'undefined') {
+            console.error("HOLO-Gen1 INLINE ERROR: THREE object IS NOT defined. Check local js/libs/three.min.js loading!");
+        } else {
+            console.log("HOLO-Gen1 INLINE LOG: All core libraries (tf, handpose, THREE) appear to be defined.");
+        }
+    </script>
+
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>
